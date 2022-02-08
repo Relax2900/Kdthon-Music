@@ -11,8 +11,11 @@ from pyrogram.errors import FloodWait, MessageNotModified
 from pyrogram.types import Message
 from youtubesearchpython import SearchVideos
 from yt_dlp import YoutubeDL
-from config import HNDLR
-@Client.on_message(filters.command(["تحميل", "تنزيل"], prefixes=f"{HNDLR}"))
+from config import HNDLR, SUDO_USERS
+from MusicTelethon.helpers.decorators import authorized_users_only
+
+@Client.on_message(filters.user(SUDO_USERS) & filters.command(["تحميل", "تنزيل"], prefixes=f"{HNDLR}"))
+@authorized_users_only
 async def song(client, message: Message):
     urlissed = get_text(message)
     if not urlissed:
@@ -155,7 +158,8 @@ is_downloading = False
 def time_to_seconds(time):
     stringt = str(time)
     return sum(int(x) * 60 ** i for i, x in enumerate(reversed(stringt.split(":"))))
-@Client.on_message(filters.command(["تنزيل_فيديو", "تحميل_فيديو"], prefixes=f"{HNDLR}"))
+@Client.on_message(filters.user(SUDO_USERS) & filters.command(["تنزيل_فيديو", "تحميل_فيديو"], prefixes=f"{HNDLR}"))
+@authorized_users_only
 async def vsong(client, message: Message):
     urlissed = get_text(message)
 

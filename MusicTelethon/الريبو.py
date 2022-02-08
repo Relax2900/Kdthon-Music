@@ -5,6 +5,8 @@ from time import time
 from pyrogram import Client, filters
 from pyrogram.types import Message
 from config import HNDLR, SUDO_USERS
+from MusicTelethon.helpers.decorators import authorized_users_only
+
 START_TIME = datetime.utcnow()
 TIME_DURATION_UNITS = (    ("Minggu", 60 * 60 * 24 * 7),    ("Hari", 60 * 60 * 24),    ("Jam", 60 * 60),    ("Menit", 60),    ("Detik", 1),)
 async def _human_time_duration(seconds):
@@ -19,9 +21,11 @@ async def _human_time_duration(seconds):
 
 
 @Client.on_message(    filters.user(SUDO_USERS) & filters.command(["ريستارت"], prefixes=f"{HNDLR}"))
+@authorized_users_only
+
 async def restart(client, m: Message):
     await m.delete()
-    loli = await m.reply("1")   
+    loli = await m.reply("1")
     await loli.edit("2")
     await loli.edit("3")
     await loli.edit("4")
@@ -30,10 +34,11 @@ async def restart(client, m: Message):
     await loli.edit("7")
     await loli.edit("8")
     await loli.edit("9")
-    await loli.edit("**✅ تم اعاده تشغيل موسيقى سورس خالد")
+    await loli.edit("**✅ تم اعاده تشغيل موسيقى خــالـد**")
     os.execl(sys.executable, sys.executable, *sys.argv)
     quit()
-@Client.on_message(filters.command(["اوامر الاغاني"], prefixes=f"{HNDLR}"))
+@Client.on_message(filters.user(SUDO_USERS) & filters.command(["اوامر"], prefixes=f"{HNDLR}"))
+@authorized_users_only
 async def help(client, m: Message):
     await m.delete()
     HELP = f"""
@@ -41,6 +46,8 @@ async def help(client, m: Message):
 
 𝘰𝘳𝘥𝘦𝘳𝘴 𝘮𝘶𝘴𝘪𝘤 𝘬𝘩𝘢𝘭𝘦𝘥 
 ——————×—————
+
+⚠️ ميوزك خـالـد @Kdthon
 
 ⧉ | لتشغيل صوتية في المكالمة أرسل ⇦ [ `{HNDLR}تشغيل  + اسم الاغنية` ]
 ⧉ | لتشغيل فيديو في المكالمة  ⇦ [ `{HNDLR}تشغيل_فيديو  + اسم الاغنية` ]
@@ -59,13 +66,12 @@ async def help(client, m: Message):
 ———————×———————
 🛠 """
     await m.reply(HELP)
-@Client.on_message(filters.command(["الريبو"], prefixes=f"{HNDLR}"))
+@Client.on_message(filters.command(["المطور", "السورس", "الريبو"], prefixes=f"{HNDLR}"))
 async def repo(client, m: Message):
     await m.delete()
     REPO = f"""
 <b>👋  اهلا {m.from_user.mention}!
-
-🎶 هذا ميوزك خالد @Kdthon
-
+🎶 هذا ميوزك خــالـد @Kdthon
+- للمطور : @vok_1
 """
     await m.reply(REPO, disable_web_page_preview=True)
